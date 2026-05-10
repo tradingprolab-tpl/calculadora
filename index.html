@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calcula como un rey · Calculadora de Lotaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --brand:#F97316;
+  --brand-dark:#d4600e;
+  --gold:#FFD700;
+  --gold-dark:#b8860b;
+  --radius:12px;
+  --radius-sm:8px;
+  --transition:0.2s ease;
+}
+
+[data-theme="dark"]{
+  --bg:#0f0f0f;
+  --bg2:#1a1a1a;
+  --bg3:#232323;
+  --border:#2e2e2e;
+  --border2:#3a3a3a;
+  --text:#f5f5f5;
+  --text2:#a0a0a0;
+  --text3:#6b6b6b;
+  --card:#1a1a1a;
+  --card2:#232323;
+  --input-bg:#161616;
+  --shadow:0 4px 24px rgba(0,0,0,0.5);
+  --btn-text:#1a1a1a;
+  --tag-buy-bg:#0d2e1a;--tag-buy-c:#4ade80;
+  --tag-sell-bg:#2e0d0d;--tag-sell-c:#f87171;
+  --sl-bg:#1f0a0a;--sl-border:#7f1d1d;--sl-text:#fca5a5;
+  --tp2-bg:#0a1628;--tp2-border:#1d4ed8;--tp2-text:#93c5fd;
+  --tp3-bg:#160a28;--tp3-border:#6d28d9;--tp3-text:#c4b5fd;
+  --parc-bg:#1a1500;--parc-border:#3a2f00;--parc-text:#d97706;
+  --warn-bg:#1a0e00;--warn-border:#7c3500;--warn-text:#fdba74;
+  --metric-bg:#161616;
+}
+
+[data-theme="light"]{
+  --bg:#f5f5f0;
+  --bg2:#ffffff;
+  --bg3:#f0ede8;
+  --border:#e5e0d8;
+  --border2:#d0cac0;
+  --text:#1a1a1a;
+  --text2:#555550;
+  --text3:#999990;
+  --card:#ffffff;
+  --card2:#fafaf7;
+  --input-bg:#f8f6f2;
+  --shadow:0 4px 24px rgba(0,0,0,0.08);
+  --btn-text:#ffffff;
+  --tag-buy-bg:#dcfce7;--tag-buy-c:#15803d;
+  --tag-sell-bg:#fee2e2;--tag-sell-c:#b91c1c;
+  --sl-bg:#fef2f2;--sl-border:#fca5a5;--sl-text:#b91c1c;
+  --tp2-bg:#eff6ff;--tp2-border:#93c5fd;--tp2-text:#1d4ed8;
+  --tp3-bg:#faf5ff;--tp3-border:#d8b4fe;--tp3-text:#7c3aed;
+  --parc-bg:#fffbeb;--parc-border:#fde68a;--parc-text:#92400e;
+  --warn-bg:#fff7ed;--warn-border:#fed7aa;--warn-text:#92400e;
+  --metric-bg:#f5f3ee;
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  font-size:15px;
+  transition:background var(--transition), color var(--transition);
+}
+
+/* ── TOP NAV ── */
+.topnav{
+  position:sticky;top:0;z-index:100;
+  background:var(--bg);
+  border-bottom:1px solid var(--border);
+  padding:0 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:58px;
+  backdrop-filter:blur(12px);
+}
+.nav-brand{display:flex;align-items:center;gap:10px}
+.nav-icon{
+  width:36px;height:36px;border-radius:10px;
+  background:var(--brand);
+  display:flex;align-items:center;justify-content:center;
+}
+.nav-icon i{color:#fff;font-size:18px}
+.nav-title{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--text)}
+.nav-title span{color:var(--brand)}
+.theme-btn{
+  width:38px;height:38px;border-radius:10px;
+  border:1px solid var(--border2);
+  background:var(--card2);
+  color:var(--text2);
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;
+  transition:all var(--transition);
+}
+.theme-btn:hover{border-color:var(--brand);color:var(--brand)}
+
+/* ── HERO ── */
+.hero{
+  text-align:center;
+  padding:48px 20px 32px;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';
+  position:absolute;top:-60px;left:50%;transform:translateX(-50%);
+  width:500px;height:260px;
+  background:radial-gradient(ellipse, rgba(249,115,22,0.12) 0%, transparent 70%);
+  pointer-events:none;
+}
+.hero-crown{
+  width:52px;height:52px;border-radius:16px;
+  background:linear-gradient(135deg,var(--brand),#ff9a4d);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 16px;
+  box-shadow:0 0 0 8px rgba(249,115,22,0.1);
+}
+.hero-crown i{color:#fff;font-size:26px}
+.hero h1{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(26px,5vw,40px);
+  font-weight:800;
+  color:var(--text);
+  line-height:1.15;
+  margin-bottom:8px;
+}
+.hero h1 span{color:var(--brand)}
+.hero p{font-size:14px;color:var(--text2);max-width:380px;margin:0 auto}
+
+/* ── MAIN LAYOUT ── */
+main{flex:1;padding:0 16px 40px;max-width:720px;margin:0 auto;width:100%}
+
+/* ── CARDS ── */
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:20px;
+  margin-bottom:14px;
+  box-shadow:var(--shadow);
+  transition:background var(--transition),border-color var(--transition);
+}
+.card-title{
+  font-size:11px;font-weight:600;
+  color:var(--text3);
+  text-transform:uppercase;letter-spacing:1px;
+  margin-bottom:14px;
+  display:flex;align-items:center;gap:6px;
+}
+.card-title i{font-size:15px;color:var(--brand)}
+
+/* ── FORM ── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.field{margin-bottom:12px}
+.field:last-child{margin-bottom:0}
+label{
+  display:block;font-size:12px;font-weight:500;
+  color:var(--text2);margin-bottom:5px;
+}
+input[type=number],select{
+  width:100%;
+  padding:10px 13px;
+  border:1.5px solid var(--border2);
+  border-radius:var(--radius-sm);
+  font-size:14px;
+  font-family:'DM Sans',sans-serif;
+  background:var(--input-bg);
+  color:var(--text);
+  outline:none;
+  transition:border-color var(--transition),background var(--transition);
+  -moz-appearance:textfield;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+input:focus,select:focus{border-color:var(--brand)}
+select{cursor:pointer}
+select option{background:var(--card);color:var(--text)}
+
+.pct-row{display:flex;align-items:center;gap:8px}
+.pct-row input{flex:1}
+.pct-badge{
+  background:var(--brand);color:#fff;
+  font-size:11px;font-weight:600;
+  padding:5px 10px;border-radius:6px;
+  white-space:nowrap;min-width:52px;text-align:center;
+  flex-shrink:0;
+}
+
+/* warn */
+.warn-box{
+  background:var(--warn-bg);
+  border:1px solid var(--warn-border);
+  border-radius:var(--radius-sm);
+  padding:11px 13px;
+  display:flex;gap:9px;align-items:flex-start;
+  margin-top:10px;
+  display:none;
+}
+.warn-box i{color:var(--brand);font-size:16px;flex-shrink:0;margin-top:1px}
+.warn-box p{font-size:12px;color:var(--warn-text);line-height:1.55}
+.divider{height:1px;background:var(--border);margin:14px 0}
+
+/* ── MAIN BUTTON ── */
+.btn-calc{
+  width:100%;padding:15px;
+  background:var(--brand);
+  color:var(--btn-text);
+  border:none;border-radius:var(--radius);
+  font-size:15px;font-weight:600;
+  font-family:'Syne',sans-serif;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  transition:background var(--transition),transform 0.1s;
+  letter-spacing:.3px;
+}
+.btn-calc:hover{background:var(--brand-dark)}
+.btn-calc:active{transform:scale(0.98)}
+.btn-calc i{font-size:18px}
+
+/* ── RESULTS ── */
+.results{display:none}
+.results.show{display:block;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* result header */
+.res-header{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:20px;margin:14px 0 10px;
+  display:flex;align-items:center;gap:16px;
+  box-shadow:var(--shadow);
+}
+.res-header-left{flex:1}
+.lotaje-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.lotaje-big{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(28px,6vw,38px);
+  font-weight:800;
+  color:var(--gold);
+  line-height:1;
+}
+.res-header-right{text-align:right}
+.tag{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:11px;font-weight:600;
+  padding:4px 10px;border-radius:6px;
+  text-transform:uppercase;letter-spacing:.5px;
+  margin-bottom:6px;
+}
+.tag.buy{background:var(--tag-buy-bg);color:var(--tag-buy-c)}
+.tag.sell{background:var(--tag-sell-bg);color:var(--tag-sell-c)}
+.res-asset{font-size:12px;color:var(--text2)}
+
+/* metric grid */
+.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.metric-card{
+  background:var(--metric-bg);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:13px 15px;
+  transition:background var(--transition);
+}
+.metric-label{font-size:11px;color:var(--text3);margin-bottom:4px;display:flex;align-items:center;gap:5px}
+.metric-label i{font-size:13px;color:var(--brand)}
+.metric-val{font-size:19px;font-weight:600;font-family:'Syne',sans-serif;color:var(--text)}
+.metric-val.green{color:#16a34a}
+.metric-val.red{color:#dc2626}
+.metric-val.gold{color:var(--gold-dark)}
+
+/* tps */
+.tps-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px}
+.tp-card{border-radius:var(--radius-sm);padding:12px 13px;text-align:center}
+.tp-card.sl{background:var(--sl-bg);border:1px solid var(--sl-border)}
+.tp-card.tp2{background:var(--tp2-bg);border:1px solid var(--tp2-border)}
+.tp-card.tp3{background:var(--tp3-bg);border:1px solid var(--tp3-border)}
+.tp-label{font-size:9px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;margin-bottom:5px}
+.tp-card.sl .tp-label{color:var(--sl-text)}
+.tp-card.tp2 .tp-label{color:var(--tp2-text)}
+.tp-card.tp3 .tp-label{color:var(--tp3-text)}
+.tp-price{font-size:14px;font-weight:600;font-family:'Syne',sans-serif;color:var(--text)}
+.tp-pips{font-size:10px;color:var(--text3);margin-top:3px}
+
+/* parciales */
+.parciales-card{
+  background:var(--parc-bg);
+  border:1px solid var(--parc-border);
+  border-radius:var(--radius);
+  padding:16px;margin-bottom:10px;
+}
+.parciales-title{
+  font-size:11px;font-weight:600;color:var(--parc-text);
+  text-transform:uppercase;letter-spacing:1px;
+  margin-bottom:12px;
+  display:flex;align-items:center;gap:6px;
+}
+.parciales-title i{font-size:15px;color:var(--brand)}
+.parc-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--parc-border)}
+.parc-row:last-child{border-bottom:none;padding-bottom:0}
+.parc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.parc-info{flex:1;font-size:13px;color:var(--text)}
+.parc-info span{font-size:11px;color:var(--text2);display:block;margin-top:2px}
+.parc-lotes{font-size:13px;font-weight:600;color:var(--brand);white-space:nowrap}
+
+/* reset */
+.btn-reset{
+  width:100%;padding:11px;
+  background:transparent;
+  border:1.5px solid var(--border2);
+  border-radius:var(--radius-sm);
+  font-size:13px;color:var(--text2);
+  cursor:pointer;margin-top:4px;
+  transition:all var(--transition);
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  font-family:'DM Sans',sans-serif;
+}
+.btn-reset:hover{border-color:var(--brand);color:var(--brand)}
+
+/* ── FOOTER ── */
+footer{
+  border-top:1px solid var(--border);
+  padding:28px 20px;
+  text-align:center;
+  background:var(--bg2);
+}
+.footer-logo{
+  font-family:'Syne',sans-serif;
+  font-size:14px;font-weight:700;
+  color:var(--text);
+  margin-bottom:4px;
+}
+.footer-logo span{color:var(--brand)}
+.footer-sub{font-size:12px;color:var(--text3);margin-bottom:18px}
+.social-links{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.social-link{
+  display:flex;align-items:center;gap:7px;
+  padding:8px 16px;
+  border-radius:50px;
+  border:1px solid var(--border2);
+  background:var(--card);
+  color:var(--text2);
+  text-decoration:none;
+  font-size:13px;font-weight:500;
+  transition:all var(--transition);
+}
+.social-link:hover{border-color:var(--brand);color:var(--brand);background:rgba(249,115,22,0.06)}
+.social-link i{font-size:17px}
+.footer-copy{font-size:11px;color:var(--text3);margin-top:18px}
+.footer-copy span{color:var(--brand)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:500px){
+  .hero{padding:36px 16px 24px}
+  .tps-grid{grid-template-columns:1fr}
+  .metric-grid{grid-template-columns:1fr 1fr}
+  .grid2{grid-template-columns:1fr}
+  .res-header{flex-direction:column;align-items:flex-start;gap:10px}
+  .res-header-right{text-align:left}
+  main{padding:0 12px 36px}
+  .topnav{padding:0 14px}
+}
+@media(max-width:360px){
+  .metric-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <div class="nav-brand">
+    <div class="nav-icon"><i class="ti ti-chart-candle"></i></div>
+    <span class="nav-title">La <span>Academia</span></span>
+  </div>
+  <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Cambiar tema">
+    <i class="ti ti-moon" id="themeIcon"></i>
+  </button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-crown"><i class="ti ti-crown"></i></div>
+  <h1>Calcula como <span>un rey</span></h1>
+  <p>Gestión de riesgo profesional. Lotaje exacto, parciales y niveles de salida en segundos.</p>
+</div>
+
+<!-- MAIN -->
+<main>
+
+  <!-- CONFIGURACIÓN -->
+  <div class="card">
+    <div class="card-title"><i class="ti ti-settings-2"></i> Configuración de operación</div>
+
+    <div class="field">
+      <label>Activo</label>
+      <select id="asset">
+        <optgroup label="⚡ Metales">
+          <option value="XAUUSD">Oro (XAU/USD)</option>
+          <option value="XAGUSD">Plata (XAG/USD)</option>
+        </optgroup>
+        <optgroup label="📈 Índices">
+          <option value="US30">US30 / Dow Jones</option>
+          <option value="US100">US100 / Nasdaq 100</option>
+          <option value="US500">US500 / S&P 500</option>
+          <option value="GER40">GER40 / DAX</option>
+        </optgroup>
+        <optgroup label="🛢️ Energía">
+          <option value="USOIL">Petróleo WTI (USD)</option>
+          <option value="UKOIL">Petróleo Brent (USD)</option>
+        </optgroup>
+        <optgroup label="💱 Forex Mayores">
+          <option value="EURUSD">EUR/USD</option>
+          <option value="GBPUSD">GBP/USD</option>
+          <option value="USDJPY">USD/JPY</option>
+          <option value="USDCHF">USD/CHF</option>
+          <option value="AUDUSD">AUD/USD</option>
+          <option value="USDCAD">USD/CAD</option>
+          <option value="NZDUSD">NZD/USD</option>
+        </optgroup>
+        <optgroup label="🔀 Forex Cruces">
+          <option value="EURJPY">EUR/JPY</option>
+          <option value="GBPJPY">GBP/JPY</option>
+          <option value="EURGBP">EUR/GBP</option>
+          <option value="AUDJPY">AUD/JPY</option>
+          <option value="CADJPY">CAD/JPY</option>
+          <option value="CHFJPY">CHF/JPY</option>
+          <option value="EURAUD">EUR/AUD</option>
+          <option value="EURCAD">EUR/CAD</option>
+          <option value="GBPAUD">GBP/AUD</option>
+          <option value="GBPCAD">GBP/CAD</option>
+          <option value="AUDCAD">AUD/CAD</option>
+          <option value="AUDNZD">AUD/NZD</option>
+          <option value="NZDJPY">NZD/JPY</option>
+        </optgroup>
+        <optgroup label="🌎 Forex Exóticas">
+          <option value="USDMXN">USD/MXN</option>
+          <option value="USDBRL">USD/BRL</option>
+          <option value="USDCOP">USD/COP</option>
+          <option value="USDCLP">USD/CLP</option>
+          <option value="USDSGD">USD/SGD</option>
+          <option value="USDHKD">USD/HKD</option>
+          <option value="USDNOK">USD/NOK</option>
+          <option value="USDSEK">USD/SEK</option>
+          <option value="USDZAR">USD/ZAR</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <div class="grid2">
+      <div class="field">
+        <label>Precio de entrada</label>
+        <input type="number" id="entry" placeholder="Ej. 2650.00" step="0.00001">
+      </div>
+      <div class="field">
+        <label>Stop Loss (SL)</label>
+        <input type="number" id="sl" placeholder="Ej. 2630.00" step="0.00001">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Take Profit final (TP)</label>
+      <input type="number" id="tp" placeholder="Ej. 2700.00" step="0.00001">
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="grid2">
+      <div class="field">
+        <label>Tamaño de cuenta (USD)</label>
+        <input type="number" id="balance" placeholder="Ej. 10000" step="1">
+      </div>
+      <div class="field">
+        <label>% de riesgo a usar</label>
+        <div class="pct-row">
+          <input type="number" id="riskPct" placeholder="1" min="0.1" max="100" step="0.1">
+          <span class="pct-badge" id="riskLabel">—%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="warn-box" id="warnBox">
+      <i class="ti ti-alert-triangle"></i>
+      <p id="warnMsg"></p>
+    </div>
+  </div>
+
+  <button class="btn-calc" onclick="calcular()">
+    <i class="ti ti-calculator"></i> Calcular lotaje
+  </button>
+
+  <!-- RESULTADOS -->
+  <div class="results" id="results">
+
+    <div class="res-header">
+      <div class="res-header-left">
+        <div class="lotaje-label">Lotaje recomendado</div>
+        <div class="lotaje-big" id="resLotaje">—</div>
+      </div>
+      <div class="res-header-right">
+        <div><span class="tag buy" id="resDir">COMPRA</span></div>
+        <div class="res-asset" id="resAsset">—</div>
+      </div>
+    </div>
+
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="metric-label"><i class="ti ti-currency-dollar"></i> Riesgo en dinero</div>
+        <div class="metric-val red" id="resRiesgo">—</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label"><i class="ti ti-trending-up"></i> Ganancia potencial</div>
+        <div class="metric-val green" id="resGanancia">—</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label"><i class="ti ti-scale"></i> Ratio R:R</div>
+        <div class="metric-val gold" id="resRR">—</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label"><i class="ti ti-coin"></i> Valor por pip</div>
+        <div class="metric-val" id="resPipVal">—</div>
+      </div>
+    </div>
+
+    <div class="tps-grid">
+      <div class="tp-card sl">
+        <div class="tp-label">Stop Loss</div>
+        <div class="tp-price" id="resSL">—</div>
+        <div class="tp-pips" id="resSLpips">—</div>
+      </div>
+      <div class="tp-card tp2">
+        <div class="tp-label">TP 2 · 50%</div>
+        <div class="tp-price" id="resTP2">—</div>
+        <div class="tp-pips" id="resTP2pips">—</div>
+      </div>
+      <div class="tp-card tp3">
+        <div class="tp-label">TP 3 · 75%</div>
+        <div class="tp-price" id="resTP3">—</div>
+        <div class="tp-pips" id="resTP3pips">—</div>
+      </div>
+    </div>
+
+    <div class="parciales-card">
+      <div class="parciales-title"><i class="ti ti-cut"></i> Plan de parciales</div>
+
+      <div class="parc-row">
+        <div class="parc-dot" style="background:#F97316"></div>
+        <div class="parc-info">
+          Parcial 1 · 30% del recorrido
+          <span id="parc1Precio">Precio: —</span>
+        </div>
+        <div class="parc-lotes" id="parc1Lotes">—</div>
+      </div>
+      <div class="parc-row">
+        <div class="parc-dot" style="background:#FFD700"></div>
+        <div class="parc-info">
+          Parcial 2 · 50% del recorrido
+          <span id="parc2Precio">Precio: —</span>
+        </div>
+        <div class="parc-lotes" id="parc2Lotes">—</div>
+      </div>
+      <div class="parc-row">
+        <div class="parc-dot" style="background:#16a34a"></div>
+        <div class="parc-info">
+          Restante · TP final
+          <span id="parc3Precio">Precio: —</span>
+        </div>
+        <div class="parc-lotes" id="parc3Lotes">—</div>
+      </div>
+    </div>
+
+    <button class="btn-reset" onclick="resetCalc()">
+      <i class="ti ti-refresh"></i> Nueva operación
+    </button>
+
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">La <span>Academia</span></div>
+  <div class="footer-sub">Trading profesional · Gestión de riesgo · Educación financiera</div>
+  <div class="social-links">
+    <!-- ✏️ REEMPLAZA los href="#" con tus links reales -->
+    <a class="social-link" href="#" target="_blank" rel="noopener" aria-label="Facebook">
+      <i class="ti ti-brand-facebook"></i> Facebook
+    </a>
+    <a class="social-link" href="#" target="_blank" rel="noopener" aria-label="TikTok">
+      <i class="ti ti-brand-tiktok"></i> TikTok
+    </a>
+    <a class="social-link" href="#" target="_blank" rel="noopener" aria-label="Instagram">
+      <i class="ti ti-brand-instagram"></i> Instagram
+    </a>
+  </div>
+  <div class="footer-copy">© 2025 <span>La Academia</span> · Todos los derechos reservados</div>
+</footer>
+
+<script>
+/* ── THEME ── */
+function toggleTheme(){
+  const html=document.documentElement;
+  const isDark=html.getAttribute('data-theme')==='dark';
+  html.setAttribute('data-theme',isDark?'light':'dark');
+  document.getElementById('themeIcon').className=isDark?'ti ti-sun':'ti ti-moon';
+  localStorage.setItem('theme',isDark?'light':'dark');
+}
+(function(){
+  const saved=localStorage.getItem('theme');
+  if(saved){
+    document.documentElement.setAttribute('data-theme',saved);
+    document.getElementById('themeIcon').className=saved==='light'?'ti ti-sun':'ti ti-moon';
+  }
+})();
+
+/* ── ASSETS CONFIG ── */
+const ASSETS={
+  XAUUSD:{name:'Oro (XAU/USD)',pipSize:0.01,pipVal:1,decimals:2},
+  XAGUSD:{name:'Plata (XAG/USD)',pipSize:0.001,pipVal:50,decimals:3},
+  US30:{name:'US30 / Dow Jones',pipSize:1,pipVal:1,decimals:0},
+  US100:{name:'US100 / Nasdaq 100',pipSize:1,pipVal:1,decimals:0},
+  US500:{name:'US500 / S&P 500',pipSize:0.1,pipVal:1,decimals:1},
+  GER40:{name:'GER40 / DAX',pipSize:1,pipVal:1,decimals:0},
+  USOIL:{name:'Petróleo WTI',pipSize:0.01,pipVal:1,decimals:2},
+  UKOIL:{name:'Petróleo Brent',pipSize:0.01,pipVal:1,decimals:2},
+  EURUSD:{name:'EUR/USD',pipSize:0.0001,pipVal:10,decimals:5},
+  GBPUSD:{name:'GBP/USD',pipSize:0.0001,pipVal:10,decimals:5},
+  USDJPY:{name:'USD/JPY',pipSize:0.01,pipVal:9.3,decimals:3},
+  USDCHF:{name:'USD/CHF',pipSize:0.0001,pipVal:11,decimals:5},
+  AUDUSD:{name:'AUD/USD',pipSize:0.0001,pipVal:10,decimals:5},
+  USDCAD:{name:'USD/CAD',pipSize:0.0001,pipVal:7.5,decimals:5},
+  NZDUSD:{name:'NZD/USD',pipSize:0.0001,pipVal:10,decimals:5},
+  EURJPY:{name:'EUR/JPY',pipSize:0.01,pipVal:9.3,decimals:3},
+  GBPJPY:{name:'GBP/JPY',pipSize:0.01,pipVal:9.3,decimals:3},
+  EURGBP:{name:'EUR/GBP',pipSize:0.0001,pipVal:12,decimals:5},
+  AUDJPY:{name:'AUD/JPY',pipSize:0.01,pipVal:9.3,decimals:3},
+  CADJPY:{name:'CAD/JPY',pipSize:0.01,pipVal:9.3,decimals:3},
+  CHFJPY:{name:'CHF/JPY',pipSize:0.01,pipVal:9.3,decimals:3},
+  EURAUD:{name:'EUR/AUD',pipSize:0.0001,pipVal:6.5,decimals:5},
+  EURCAD:{name:'EUR/CAD',pipSize:0.0001,pipVal:7.5,decimals:5},
+  GBPAUD:{name:'GBP/AUD',pipSize:0.0001,pipVal:6.5,decimals:5},
+  GBPCAD:{name:'GBP/CAD',pipSize:0.0001,pipVal:7.5,decimals:5},
+  AUDCAD:{name:'AUD/CAD',pipSize:0.0001,pipVal:7.5,decimals:5},
+  AUDNZD:{name:'AUD/NZD',pipSize:0.0001,pipVal:10,decimals:5},
+  NZDJPY:{name:'NZD/JPY',pipSize:0.01,pipVal:9.3,decimals:3},
+  USDMXN:{name:'USD/MXN',pipSize:0.0001,pipVal:0.55,decimals:4},
+  USDBRL:{name:'USD/BRL',pipSize:0.0001,pipVal:2,decimals:4},
+  USDCOP:{name:'USD/COP',pipSize:1,pipVal:0.00025,decimals:1},
+  USDCLP:{name:'USD/CLP',pipSize:1,pipVal:0.001,decimals:1},
+  USDSGD:{name:'USD/SGD',pipSize:0.0001,pipVal:7.4,decimals:5},
+  USDHKD:{name:'USD/HKD',pipSize:0.0001,pipVal:1.28,decimals:5},
+  USDNOK:{name:'USD/NOK',pipSize:0.0001,pipVal:0.93,decimals:5},
+  USDSEK:{name:'USD/SEK',pipSize:0.0001,pipVal:0.92,decimals:5},
+  USDZAR:{name:'USD/ZAR',pipSize:0.0001,pipVal:0.055,decimals:4},
+};
+
+function fmt(n,d){return parseFloat(n.toFixed(d)).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d})}
+function fmtMoney(n){return '$'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
+
+document.getElementById('riskPct').addEventListener('input',function(){
+  const v=parseFloat(this.value);
+  const lbl=document.getElementById('riskLabel');
+  const wb=document.getElementById('warnBox');
+  if(isNaN(v)){lbl.textContent='—%';wb.style.display='none';return}
+  lbl.textContent=v+'%';
+  if(v>2){
+    wb.style.display='flex';
+    document.getElementById('warnMsg').textContent='Estás usando más del 2% de tu cuenta. Un trader profesional cuida su capital antes que sus ganancias. Rachas de pérdidas son normales — no arriesgues más de lo que puedes recuperar fácilmente. Cuida tus reyes.';
+  }else{
+    wb.style.display='none';
+  }
+});
+
+function calcular(){
+  const asset=document.getElementById('asset').value;
+  const entry=parseFloat(document.getElementById('entry').value);
+  const sl=parseFloat(document.getElementById('sl').value);
+  const tp=parseFloat(document.getElementById('tp').value);
+  const balance=parseFloat(document.getElementById('balance').value);
+  const riskPct=parseFloat(document.getElementById('riskPct').value);
+
+  if([entry,sl,tp,balance,riskPct].some(isNaN)||entry===0||sl===0||tp===0){
+    alert('Por favor completa todos los campos antes de calcular.');return;
+  }
+
+  const cfg=ASSETS[asset];
+  const riskAmt=balance*(riskPct/100);
+  const slDist=Math.abs(entry-sl);
+  const tpDist=Math.abs(tp-entry);
+  const pipsSL=slDist/cfg.pipSize;
+  const pipsTP=tpDist/cfg.pipSize;
+  const lotaje=riskAmt/(pipsSL*cfg.pipVal);
+  const ganancia=lotaje*pipsTP*cfg.pipVal;
+  const rr=tpDist/slDist;
+  const dir=tp>entry?'COMPRA':'VENTA';
+
+  const tp2Price=dir==='COMPRA'?entry+tpDist*0.5:entry-tpDist*0.5;
+  const tp3Price=dir==='COMPRA'?entry+tpDist*0.75:entry-tpDist*0.75;
+  const parc1Price=dir==='COMPRA'?entry+tpDist*0.30:entry-tpDist*0.30;
+  const parc2Price=dir==='COMPRA'?entry+tpDist*0.50:entry-tpDist*0.50;
+
+  const lotsDisp=lotaje<0.01?lotaje.toFixed(4):lotaje<0.1?lotaje.toFixed(3):lotaje.toFixed(2);
+  const parc1Lots=(lotaje*0.30).toFixed(2);
+  const parc2Lots=(lotaje*0.50).toFixed(2);
+  const parc3Lots=(lotaje*0.50).toFixed(2);
+
+  document.getElementById('resLotaje').textContent=lotsDisp+' lotes';
+  document.getElementById('resAsset').textContent=cfg.name;
+  const dirEl=document.getElementById('resDir');
+  dirEl.textContent=dir;
+  dirEl.className='tag '+(dir==='COMPRA'?'buy':'sell');
+
+  document.getElementById('resRiesgo').textContent=fmtMoney(riskAmt);
+  document.getElementById('resGanancia').textContent=fmtMoney(ganancia);
+  document.getElementById('resRR').textContent='1:'+rr.toFixed(2);
+  document.getElementById('resPipVal').textContent='$'+(lotaje*cfg.pipVal).toFixed(2)+'/pip';
+
+  document.getElementById('resSL').textContent=fmt(sl,cfg.decimals);
+  document.getElementById('resSLpips').textContent=Math.round(pipsSL)+' pips de riesgo';
+  document.getElementById('resTP2').textContent=fmt(tp2Price,cfg.decimals);
+  document.getElementById('resTP2pips').textContent=Math.round(pipsTP*0.5)+' pips';
+  document.getElementById('resTP3').textContent=fmt(tp3Price,cfg.decimals);
+  document.getElementById('resTP3pips').textContent=Math.round(pipsTP*0.75)+' pips';
+
+  document.getElementById('parc1Precio').textContent='Precio: '+fmt(parc1Price,cfg.decimals);
+  document.getElementById('parc1Lotes').textContent=parc1Lots+' lotes (30%)';
+  document.getElementById('parc2Precio').textContent='Precio: '+fmt(parc2Price,cfg.decimals);
+  document.getElementById('parc2Lotes').textContent=parc2Lots+' lotes (50%)';
+  document.getElementById('parc3Precio').textContent='Precio: '+fmt(tp,cfg.decimals)+' (TP final)';
+  document.getElementById('parc3Lotes').textContent=parc3Lots+' lotes (50%)';
+
+  const res=document.getElementById('results');
+  res.className='results show';
+  setTimeout(()=>res.scrollIntoView({behavior:'smooth',block:'start'}),50);
+}
+
+function resetCalc(){
+  document.getElementById('results').className='results';
+  ['entry','sl','tp','riskPct'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('riskLabel').textContent='—%';
+  document.getElementById('warnBox').style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
